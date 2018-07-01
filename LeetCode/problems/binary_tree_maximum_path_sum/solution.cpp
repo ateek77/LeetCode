@@ -9,24 +9,18 @@
  */
 class Solution {
 public:
-    int max_p(TreeNode*root,int &mx)
+    int MP(TreeNode *rt,int &m)
     {
-       if(!root)
-        return -99999;
-        
-        int l = max_p(root->left,mx);
-        int r= max_p(root->right,mx);
-        int v = root->val;
-      
-        mx = max(mx,max(v,max(l,r)));        
-        mx = max(mx,max(l+r+v,v+max(l,r)));
-        return max(v,v+max(l,r));        
+        if(!rt)
+            return 0;
+        int l = max(0,MP(rt->left,m));
+        int r= max(0,MP(rt->right ,m));
+        m =max(m,l+r+rt->val);
+        return rt->val+max(l,r);
     }
     int maxPathSum(TreeNode* root) {
-        if(!root)
-            return INT_MIN;
-        int mx=INT_MIN;
-        max_p(root,mx);
-        return mx;
+        int  m=INT_MIN;
+        MP(root,m);
+        return m;
     }
 };
