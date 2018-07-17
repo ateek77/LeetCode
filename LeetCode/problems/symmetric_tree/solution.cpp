@@ -9,16 +9,17 @@
  */
 class Solution {
 public:
-    bool trav(TreeNode* r1,TreeNode *r2)
+   bool check(TreeNode* r1,TreeNode* r2)
     {
         if(!r1 && !r2)
             return 1;
-        if(!r1 && r2 || !r2 && r1)
+        else if(r1 && !r2 || r2 && !r1 || r1->val !=r2->val )
             return 0;
-        return r1->val == r2->val &&  trav(r1->left,r2->right) && trav(r1->right ,r2->left);
+        return check(r1->left ,r2->right) && check(r1->right ,r2->left);
     }
     bool isSymmetric(TreeNode* root) {
-        return trav(root,root);
-        
+        if(!root)
+            return 1;
+        return check(root->left,root->right);  
     }
 };
