@@ -1,28 +1,25 @@
 class Solution {
 public:
-    int longestValidParentheses(string s) {
-     
-        int len = s.length(),cnt=0;
-        stack<char> stk;
-        vector<int> v(len);
-        for(int i=0;i<len;++i)
+    int longestValidParentheses(string str) {
+        if(str.size()<=1)
+            return 0;
+                
+        stack<bool> stk;
+        vector<int> vec(str.size(),0);
+        
+        for(int i=0;i<str.size();++i)
         {
-            if(s[i]=='(')
-                stk.push(s[i]);
-            else if(s[i]==')' && !stk.empty() && stk.top()=='(')
+            if(str[i]=='(')
+                stk.push(1);
+            else if(stk.empty() || !stk.top())
+                stk.push(0);
+            else if(str[i]==')' && !stk.empty())
             {
                 stk.pop();
-                v[stk.size()]+=v[stk.size()+1]+2;
-                v[stk.size()+1]=0; 
+                vec[stk.size()]  +=vec[stk.size()+1]+2;
+                vec[stk.size()+1] = 0;
             }
-            else
-                stk.push(s[i]);
         }
-        
-        
-        int val=0;
-        if(v.size()>0)  
-            val=*max_element(v.begin(),v.end());
-        return val;
+        return *max_element(vec.begin(),vec.end());        
     }
 };
