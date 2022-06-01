@@ -11,26 +11,23 @@ public:
     ListNode *detectCycle(ListNode *head) {
         if(!head)
             return head;
-    
-        ListNode *sl ,*fst ;
-        sl  = fst =head;
-        
-        do
-        {
-            sl = sl->next;
-            if(fst->next)
-                fst = fst->next->next;
+        ListNode *p1,*p2;
+        p1=p2=head;
+        do{
+            if(p2->next)    
+                p2=p2->next->next;
             else
-                fst =fst->next;
-        }while(fst && fst != sl);
-        if(!fst)
+                p2=p2->next;
+            p1=p1->next;
+        }while(p2 && p1!=p2);
+        if(!p2 ||!p2->next)
             return NULL;
-        fst =head;
-        while(sl!=fst)
-        {
-            fst =fst->next;
-            sl=sl->next;
+        p1=head;
+        while(p1!=p2){
+            p1=p1->next;
+            p2=p2->next;
         }
-        return sl;
+        return p1;
+        
     }
 };
