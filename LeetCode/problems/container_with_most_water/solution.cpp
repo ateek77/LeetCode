@@ -1,16 +1,16 @@
 class Solution {
 public:
     int maxArea(vector<int>& h) {
-        int mx=0,n=h.size()-1,s=0;
-        while(s<n)
-        {
-            mx =max(mx,(n-s)*min(h[s],h[n]));
-            if(h[s]<h[n])
-                ++s;
-            else
-                --n;
+        int mx_h,i,n=h.size()-1;
+        ios_base::sync_with_stdio(0);
+        cin.tie(0);
+        mx_h=0;i=0;
+        while(i<n){
+            int area = (n-i) * min(h[i],h[n]);
+            if(area>mx_h) mx_h= area;
+            if(h[i]<=h[n]) i++;
+            else --n;
         }
-        
-        return mx; 
+        return mx_h;
     }
 };
