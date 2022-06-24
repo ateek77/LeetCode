@@ -4,26 +4,27 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    bool check(TreeNode *root,TreeNode *root2)
-    {
-        if(!root && !root2)
-            return 1;
-        if(!root && root2 || root && !root2)
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(!p && !q) return 1;
+        if(!p || !q) return 0;
+        if(p->val != q->val) return 0;
+        if(!isSameTree(p->left,q->left) || !isSameTree(p->right,q->right))
             return 0;
-        return root->val == root2->val && check(root->left,root2->left ) && check(root->right, root2->right);
+        return 1;
     }
-        
-    bool isSubtree(TreeNode* s, TreeNode* t) {
-        if(!s)
-            return 0;
-        if(s->val==t->val && check(s,t))
+    bool isSubtree(TreeNode* root, TreeNode* subroot) {
+        if(!root || !subroot) return 0;
+        if(root->val == subroot->val && isSameTree(root,subroot))
             return 1;
-        return isSubtree(s->left,t) || isSubtree(s->right,t);
+        return isSubtree(root->left,subroot) || isSubtree(root->right,subroot);
+            
             
     }
 };
