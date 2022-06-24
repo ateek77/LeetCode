@@ -4,26 +4,30 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    int die(TreeNode *rt,int &mx)
-    {
-        if(!rt)
-            return 0;
-        if(!rt->left && !rt->right)
-                return 1;
-        int l =die(rt->left,mx);
-        int r =die(rt->right ,mx);
-        
-        mx = mx>(l+r)?mx:(l+r);
-        return (l>r?l:r)+1;
+    int depth(TreeNode *root){
+        if(!root) return 0;
+        return 1+max(depth(root->left),depth(root->right));
     }
     int diameterOfBinaryTree(TreeNode* root) {
-        int mx=0;
-        die(root,mx);
-        return mx;
+        if(!root) return 0;
+        int leftDepth,rightDepth,leftDiameter,rightDiameter;
+        
+        leftDepth = depth(root->left);
+        rightDepth = depth(root->right);
+        
+        leftDiameter = diameterOfBinaryTree(root->left);
+        rightDiameter = diameterOfBinaryTree(root->right);
+        
+        int result = max(leftDiameter,rightDiameter);
+        
+        return max(result,leftDepth+rightDepth);
+        
     }
 };
