@@ -4,52 +4,48 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         
-        vector< vector<int> > vv;
-        if(!root)
-            return vv;
-        stack<TreeNode *> s1,s2;
-        s1.push(root);
-        bool trn=0;
-        TreeNode * node=NULL;
-        while(!s1.empty())
-        {
-            vector<int> v;
-            if(trn)
-            {
-                while(!s1.empty())
-                {
-                    node = s1.top(); s1.pop();
-                    v.push_back(node->val);
-                    if(node->right)
-                        s2.push(node->right);
-                    if(node->left)
-                        s2.push(node->left);                   
-                }                
+        vector<vector<int>> result;
+        if(!root) return result;
+        queue<TreeNode*> levelQueue; 
+        levelQueue.push(root);
+        levelQueue.push(NULL);
+        vector<TreeNode*> temp;
+        bool toggle =1;
+        while(!levelQueue.empty()){
+            TreeNode* node = levelQueue.front(); levelQueue.pop();
+            if(node){
+                if(toggle)
+                    temp.push_back(node);
+                else
+                    temp.insert(temp.begin(),node);
+                if(node->left)
+                    levelQueue.push(node->left);
+                if(node->right)
+                    levelQueue.push(node->right);                
+            }else{
+                
+                toggle = !toggle;
+                
+                vector<int> aux;
+                for(auto it:temp){
+                    aux.push_back(it->val);
+                }
+                result.push_back(aux);  
+                temp.clear();
+                if(!levelQueue.size())
+                    break;
+                levelQueue.push(NULL);
             }
-            else
-            {
-                 while(!s1.empty())
-                {
-                    node = s1.top(); s1.pop();
-                    v.push_back(node->val);
-                    if(node->left)
-                        s2.push(node->left);  
-                    if(node->right)
-                        s2.push(node->right);
-                                     
-                }                
-            }
-            vv.push_back(v);
-            trn=1-trn;
-            swap(s1,s2);           
         }
-        return vv;
+        return result;                
     }
 };
