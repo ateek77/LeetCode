@@ -4,31 +4,27 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-static auto _init = [](){
-    std::ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    return 0;
-};
 class Solution {
 public:
-    void trav(TreeNode *root,map<int,int> &mp,int ind)
-    {
-        if(!root)
-                return;
-        if(!mp[ind])
-            mp[ind]=root->val;
-        trav(root->right,mp,ind+1);
-        trav(root->left,mp,ind+1);        
+    void rightTraverse(TreeNode* root,map<int ,int> &map,int level){
+        if(!root)   return ;
+        rightTraverse(root->left,map,level+1);
+        map[level]=root->val;
+        rightTraverse(root->right,map,level+1);
+        return;
     }
     vector<int> rightSideView(TreeNode* root) {
-        map<int,int> mp;
-        trav(root,mp,0);
-        vector<int> v;
-        for(auto it:mp)
-            v.push_back(it.second);
-        return v;
+        map<int,int> valueMap;
+        rightTraverse(root,valueMap,0);
+        vector<int> result;
+        for(auto it:valueMap){
+            result.push_back(it.second);
+        }
+        return result;
     }
 };
