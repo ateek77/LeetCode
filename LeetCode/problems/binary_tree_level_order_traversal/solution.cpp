@@ -4,45 +4,38 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
-        vector<vector<int> > vv;
-        if(!root)
-            return vv;
-        queue<TreeNode *> q;
-        q.push(root);
-        q.push(NULL);
-        int l=0;
         
-        vector<int> tmp;
-        vv.push_back(tmp);
-        while(!q.empty())
-        {
-            TreeNode *ptr = q.front();
-            q.pop();
-            
-            if(ptr)
-            {
-                vv[l].push_back(ptr->val);
-                if(ptr->left)
-                    q.push(ptr->left);
-                if(ptr->right)
-                    q.push(ptr->right);
-            }
-            else
-            {
-                l++;
-                if(!q.empty()){
-                    q.push(NULL);
-                    vector<int> tmp;
-                   vv.push_back(tmp);
+        vector<vector<int>> result;
+        if(!root)   return result;
+        queue<TreeNode*> node_queue;
+        
+        node_queue.push(root);
+        node_queue.push(NULL);
+        result.push_back(vector<int>());
+        while(!node_queue.empty()){
+            root = node_queue.front(); node_queue.pop();
+            if(root){
+                result[result.size()-1].push_back(root->val);
+                if(root->left)
+                    node_queue.push(root->left);
+                if(root->right)
+                    node_queue.push(root->right);
+            }else{
+                if(node_queue.size()==0){
+                    break;
                 }
+                node_queue.push(NULL);
+                result.push_back(vector<int>());
             }
         }
-        return vv;
+        return result;
     }
 };
