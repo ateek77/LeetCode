@@ -12,33 +12,50 @@ public:
 
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        if(!root)
-            return "-99";
-        string str =to_string(root->val)+" ";
         
-        str += serialize(root->left) + " ";
-        str += serialize(root->right) + " ";
-        return str;
+        // stringstream submited code for second time
+        if(!root)   return "*";
+        string left_tree = serialize(root->left);
+        string right_tree = serialize(root->right);
+        
+        string serialize_string = to_string(root->val) +",";
+        serialize_string += left_tree+","+right_tree;
+        
+        return serialize_string;
     }
-    TreeNode *con(stringstream &ss)
-    {
-        int a;
-        ss>>a;
-        if(a==-99)
+    
+    int position =0;
+    
+    TreeNode* dser(string &data){
+        if(position >=data.size() )    
             return NULL;
-        TreeNode *nd = new TreeNode(a);
-        nd->left = con(ss);
-        nd->right = con(ss);
-        return nd;
+        if(data[position]=='*'){
+            position+=2;
+            return NULL;
+        }
+        int pos=position;
+        while(pos<data.size() && data[pos]!=',')
+            ++pos;
+                
+        int number = stoi(data.substr(position, pos-position));
+        // cout<<position<<" "<<pos<<"\n";
+        position=pos+1;
+        
+        TreeNode *node = new TreeNode(number);
+        
+        node->left = dser(data);
+        node->right = dser(data);
+        
+        return node;
     }
+    
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
- //       cout<<data <<" ";
-        stringstream ss(data);
-        return con(ss);
+       string res=data;
+        return dser(res);
     }
 };
 
 // Your Codec object will be instantiated and called as such:
-// Codec codec;
-// codec.deserialize(codec.serialize(root));
+// Codec ser, deser;
+// TreeNode* ans = deser.deserialize(ser.serialize(root));
