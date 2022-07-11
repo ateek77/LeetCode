@@ -1,7 +1,7 @@
 class node{
     public:
     bool isWord;
-    unordered_map<char,node*> next;    
+    node* next[27];
 };
 class Trie {
 public:
@@ -14,32 +14,32 @@ public:
     void insert(string word) {
         auto it= trie;
         for(auto itt:word){
-            if(!it->next[itt]){
-                it->next[itt] = new node();
+            if( it->next[itt-'a']==NULL){
+                it->next[itt-'a'] = new node();
             }
-            it=it->next[itt];            
+            it=it->next[itt-'a'];            
         }
         it->isWord =1;
     }
     
     bool search(string word) {
-        auto it=trie;
+        auto it= trie;
         for(auto itt:word){
-            if(!it->next[itt]){
+            if( ((it->next[itt-'a']))==NULL){
                 return false;
             }
-            it=it->next[itt];            
+            it=it->next[itt-'a'];            
         }
         return it->isWord==1;
     }
     
     bool startsWith(string prefix) {
-        auto it= trie;
+         auto it= trie;
         for(auto itt:prefix){
-            if(!it->next[itt]){
+            if( ((it->next[itt-'a']))==NULL){
                 return false;
             }
-            it=it->next[itt];            
+            it=it->next[itt-'a'];            
         }
         return true;
     }
