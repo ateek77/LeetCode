@@ -1,7 +1,7 @@
 class node{
     public:
     bool isWord;
-    map<char,node*> next;    
+    unordered_map<char,node*> next;    
 };
 class Trie {
 public:
