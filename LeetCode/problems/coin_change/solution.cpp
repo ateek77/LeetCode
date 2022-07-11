@@ -5,31 +5,27 @@ static int x=[](){
 }();
 class Solution {
 public:
-    int coinChange(vector<int>& coins, int amount) {
-        if (coins.size() == 0 || amount == 0)
-            return 0;
-        int count = amount + 1;
-        
-        std::sort(coins.begin(), coins.end());
-        
-        dfs(coins, coins.size()-1, amount, count, 0);
-        
-        return count == amount + 1 ? -1 : count;
-    }
     
-    void dfs(const vector<int>& coins, const int& posi, const int& target, int& count, const int& currentCount) {
-        if (target < 0 || currentCount + ceil((double) target / coins[posi]) >= count)
-            return; // best effort could be
-        if (target == 0) {
-            count = min(count, currentCount);
-            return;
+    int CE_DP(vector<int> &v ,int amt)
+    { 
+        int DP[amt+1],n=v.size()-1;
+        memset(DP,125,sizeof(DP));
+        DP[0]=0;
+        for(int i=1;i<=amt;++i)
+        { 
+            for(int j=n;j>=0;--j){ 
+                if(i-v[j]>=0)    
+                    DP[i]  =  min(DP[i],DP[i-v[j]]+1);
+            } 
         }
-        for (int i = posi; i >=0; --i) {
-            dfs(coins, i, target - coins[i], count, currentCount + 1);
-        }
+        // for(int i=0;i<=amt;++i)
+        //     cout<<DP[i]<<" ";
+        // cout<<"\n";
+        return DP[amt]<=amt?DP[amt]:-1;
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        sort(coins.begin(),coins.end()); 
+        
+        return CE_DP(coins,amount);
     }
 };
-/*
-[3,7,405,436]
-8839
-*/
